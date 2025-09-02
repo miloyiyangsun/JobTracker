@@ -1,7 +1,23 @@
 # 💼 荷兰求职追踪系统 | Netherlands Job Tracker
 
-<!-- 在这里添加您的截图 -->
-<!-- Screenshots will be added here -->
+## 📸 Application Screenshots
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img 
+src="https://github.com/user-attachments/assets/54561cfe-0274-43f8-ba17-1061e62edcd0" 
+width="90%" alt="Applied Jobs Interface"/>
+      <br><b>📋 Applied Jobs Management</b>
+    </td>
+    <td width="50%" align="center">
+      <img 
+src="https://github.com/user-attachments/assets/b96c2c86-3e18-4abc-9f40-3118b9977769" 
+width="90%" alt="Target Companies Interface"/>
+      <br><b>🎯 Target Companies Research</b>
+    </td>
+  </tr>
+</table>
 
 ---
 
