@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "company": "Irdeto",
+    "position": "Junior Software Engineer",
+    "status": "applied",
+    "appliedDate": "2025-08-31",
+    "notes": "应用已确认收到，Talent Acquisition Team正在审核。建议查看官网和LinkedIn Life页面了解工作环境。公司强调多元化包容性文化，平等机会雇主。",
+    "description": "阿姆斯特丹/豪夫多普｜数字版权保护和网络安全｜荷兰300人，全球1000人｜高度国际化，65个国籍员工，多元化包容性强， 高度国际化",
+    "link": "https://careers.irdeto.com"
+  },
+  {
+    "id": 1756727628211,
+    "company": "Databricks",
+    "position": "Software Engineer - New Grad (2026 Start)",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "2026年开始的新毕业生职位，官方邮件来自@databricks.com。应用已收到，将快速审核并联系。",
+    "description": "阿姆斯特丹｜统一数据分析平台，大数据和机器学习｜欧洲最大研发中心280人｜极高国际化，主要工程师为国际员工，英语友好， 极高国际化",
+    "link": "https://www.databricks.com/company/careers"
+  },
+  {
+    "id": 1756727647035,
+    "company": "Mammoet",
+    "position": "Junior Engineer",
+    "status": "rejected",
+    "appliedDate": "2025-09-01",
+    "notes": "荷兰斯基丹(NL-Schiedam)职位，5-10个工作日内回复，可通过candidate dashboard追踪进度。",
+    "description": "斯基丹｜重型起重运输工程，海上风电｜欧洲总部，荷兰6000人，全球7000人｜高度国际化，90个全球办公室， 高度国际化",
+    "link": "https://www.mammoet.com/careers/"
+  },
+  {
+    "id": 1756727666669,
+    "company": "Info Support",
+    "position": "Software Engineer",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "荷兰公司，有播客「Can you do IT?」和博客资源可了解公司文化，邮件地址：carriere@infosupport.com",
+    "description": "芬嫩达尔｜IT咨询软件开发｜荷兰500+人，比利时有分部｜主要荷兰本土员工，少数国际员工， 相对本土",
+    "link": "https://www.infosupport.com/carriere/"
+  },
+  {
+    "id": 1756727683049,
+    "company": "Pax8",
+    "position": "Team Position (Details TBD)",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "10天内通知进度，48小时内反馈面试结果，整个流程约1个月。有Facebook, Twitter和LinkedIn。",
+    "description": "兹沃勒｜云服务分销平台，MSP解决方案｜荷兰小办公室，美国丹佛总部｜国际化公司，重视多元化包容性， 中等国际化",
+    "link": "https://www.pax8.com/company/careers/"
+  },
+  {
+    "id": 1756727683063,
+    "company": "Netlight",
+    "position": "Digital Role (Network Organization)",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "专注数字化前沿的网络型组织，有LinkedIn和Instagram，如无回复则暂时没有匹配职位。",
+    "description": "阿姆斯特丹｜数字化咨询转型｜2000人遍布12个城市｜极高国际化，非洲裔员工资源组获奖，扁平化组织， 极高国际化",
+    "link": "https://www.netlight.com/careers/"
+  },
+  {
+    "id": 1756727683077,
+    "company": "ENGIE Energie Nederland",
+    "position": "iOS Developer",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "参考号Ref. 43840，荷兰能源公司，建议完善个人资料，有持续的人才数据库搜索。",
+    "description": "兹沃勒总部｜能源供应，绿色电力和燃气｜荷兰6000人，全球ENGIE集团17万人｜国际集团，董事会多元化， 中等国际化",
+    "link": "https://www.engie.nl/en/careers/"
+  },
+  {
+    "id": 1756727694191,
+    "company": "GamePoint",
+    "position": "Game Operator",
+    "status": "applied",
+    "appliedDate": "2025-09-01",
+    "notes": "游戏运营职位，2周内无回复则表示未通过初筛，申请量较大。BambooHR系统。",
+    "description": "海牙｜多人社交游戏开发，休闲游戏｜中型团队，全球办公室｜高度国际化，支持海外员工移居荷兰， 高度国际化",
+    "link": "https://gamepoint.com/careers/"
+  }
+]

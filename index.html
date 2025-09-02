@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #3993DD;
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .add-btn {
+            background: #29E7CD;
+            color: #3993DD;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(41, 231, 205, 0.4), 0 2px 8px rgba(41, 231, 205, 0.2);
+        }
+
+        .add-btn:hover {
+            background: #E0ACD5;
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(224, 172, 213, 0.5), 0 4px 12px rgba(224, 172, 213, 0.3);
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dynamic Button - 根据当前Tab显示不同的按钮 */
+        .dynamic-add-btn {
+            background: #29E7CD;
+            color: #3993DD;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(41, 231, 205, 0.4), 0 2px 8px rgba(41, 231, 205, 0.2);
+        }
+
+        .dynamic-add-btn:hover {
+            background: #E0ACD5;
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(224, 172, 213, 0.5), 0 4px 12px rgba(224, 172, 213, 0.3);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+            background: #E0ACD5;
+            border-color: #E0ACD5;
+            color: white;
+        }
+
+        .stat-card:hover .stat-number {
+            color: white !important;
+        }
+
+        .stat-card:hover .stat-label {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6A3E37;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-applied .stat-number { color: #29E7CD; }
+        .stat-interview .stat-number { color: #E0ACD5; }
+        .stat-offer .stat-number { color: #29E7CD; }
+        .stat-rejected .stat-number { color: #6A3E37; }
+        .stat-total .stat-number { color: #3993DD; }
+
+        /* Monthly Progress */
+        .monthly-progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .monthly-progress-container:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .monthly-progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #3993DD;
+        }
+
+        .progress-percentage {
+            background: #29E7CD;
+            color: #3993DD;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .monthly-progress-bar {
+            height: 12px;
+            background: rgba(57, 147, 221, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 8px;
+            border: 1px solid rgba(57, 147, 221, 0.3);
+        }
+
+        .monthly-progress-fill {
+            height: 100%;
+            background: #29E7CD;
+            border-radius: 6px;
+            transition: width 1s ease;
+            width: 0%;
+            position: relative;
+        }
+
+        .monthly-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .monthly-progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6A3E37;
+        }
+
+        /* Daily Applications Chart */
+        /* Progress and Chart Layout */
+        .progress-chart-layout {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chart-section {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .daily-chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .daily-chart-container:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .daily-chart-container .chart-wrapper {
+            flex: 1;
+        }
+
+        .monthly-progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-section .monthly-progress-container:last-child {
+            margin-bottom: 0;
+        }
+
+        .daily-chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #3993DD;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .chart-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: #29E7CD;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .chart-point {
+            fill: #29E7CD;
+            r: 4;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .chart-point:hover {
+            r: 6;
+            fill: #E0ACD5;
+        }
+
+        .chart-grid {
+            stroke: rgba(106, 62, 55, 0.2);
+            stroke-width: 1;
+        }
+
+        .chart-axis {
+            stroke: #6A3E37;
+            stroke-width: 1;
+        }
+
+        .chart-label {
+            font-size: 10px;
+            fill: #6A3E37;
+            text-anchor: middle;
+        }
+
+        .chart-value-label {
+            font-size: 10px;
+            fill: #29E7CD;
+            font-weight: 600;
+            text-anchor: middle;
+        }
+
+        /* Table */
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            overflow-x: auto; /* 水平滚动 (Horizontal scrolling) */
+            overflow-y: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .table {
+            min-width: 1400px; /* 增加最小宽度支持Link列 (Increase minimum width to support Link column) */
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #000;
+            border-right: 1px solid #000;
+        }
+
+        .table th:last-child,
+        .table td:last-child {
+            border-right: none;
+        }
+
+        .table th {
+            background: #3993DD;
+            font-weight: 600;
+            font-size: 11px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(224, 172, 213, 0.2);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table td {
+            color: black;
+            font-size: 13px;
+        }
+
+        /* Timeline column width - 允许自动换行的紧凑布局 */
+        .table th:nth-child(5),
+        .table td:nth-child(5) {
+            width: 105px !important;
+            min-width: 105px !important;
+            max-width: 105px !important;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Company description column - 公司简介列样式 */
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 200px;
+            min-width: 180px;
+            max-width: 250px;
+        }
+
+        /* Research Notes column width - 增加宽度显示更多研究信息 */
+        .table th:nth-child(6),
+        .table td:nth-child(6) {
+            width: 300px !important;
+            min-width: 300px !important;
+            max-width: 300px !important;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        /* Company Name column - 居中显示 */
+        .table th:nth-child(1),
+        .table td:nth-child(1) {
+            text-align: center !important;
+        }
+
+        .company-description {
+            font-size: 0.7em; /* 比其他列字体小30% (30% smaller than other columns) */
+            line-height: 1.3;
+            color: black;
+        }
+
+        /* Link column styling - 链接列样式 */
+        .table th:nth-child(6),
+        .table td:nth-child(6) {
+            width: 120px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .career-link a {
+            color: #3993DD;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #29E7CD;
+            display: inline-block;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .career-link a:hover {
+            background: #E0ACD5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(224, 172, 213, 0.4), 0 2px 6px rgba(224, 172, 213, 0.2);
+        }
+
+        .editable {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .editable:hover {
+            background: rgba(224, 172, 213, 0.2);
+            outline: 1px solid #E0ACD5;
+        }
+        
+        .editing {
+            background: rgba(224, 172, 213, 0.3) !important;
+            outline: 2px solid #E0ACD5 !important;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .status-applied { background: #29E7CD; color: #3993DD; }
+        .status-interview { background: #E0ACD5; color: white; }
+        .status-offer { background: #29E7CD; color: #3993DD; }
+        .status-rejected { background: #6A3E37; color: white; }
+        
+        /* Target Companies Status Badges */
+        .status-researching { background: #3993DD; color: white; }
+        .status-planning { background: #E0ACD5; color: white; }
+        .status-ready { background: #29E7CD; color: #3993DD; }
+        
+        /* Priority Badges */
+        .priority-high { background: #FF6B6B; color: white; }
+        .priority-medium { background: #FFE66D; color: #3993DD; }
+        .priority-low { background: #95E1D3; color: #3993DD; }
+
+        .delete-btn {
+            background: #6A3E37;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(106, 62, 55, 0.4), 0 2px 6px rgba(106, 62, 55, 0.2);
+        }
+
+        .delete-btn:hover {
+            background: #E0ACD5;
+            color: #3993DD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(224, 172, 213, 0.5), 0 3px 8px rgba(224, 172, 213, 0.3);
+        }
+
+        /* Conversion Funnel */
+        .funnel-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25), 0 6px 24px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .funnel-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .funnel-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: white;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .funnel-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .funnel-stage {
+            border-radius: 16px;
+            padding: 24px 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .funnel-stage:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .funnel-applied {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #29E7CD;
+        }
+
+        .funnel-interview {
+            width: 240px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #E0ACD5;
+        }
+
+        .funnel-offer {
+            width: 180px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #29E7CD;
+        }
+
+        .funnel-stage-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            gap: 8px;
+        }
+
+        .funnel-icon {
+            font-size: 28px;
+            opacity: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .funnel-info {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .funnel-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3993DD;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .funnel-count {
+            font-size: 40px;
+            font-weight: 800;
+            color: #3993DD;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .funnel-applied .funnel-count {
+            color: #29E7CD;
+        }
+
+        .funnel-interview .funnel-count {
+            color: #E0ACD5;
+        }
+
+        .funnel-offer .funnel-count {
+            color: #29E7CD;
+        }
+
+        .funnel-connector {
+            width: 4px;
+            height: 28px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 2px;
+            position: relative;
+            margin: 12px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .funnel-connector::after {
+            content: '▼';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+
+        /* Form Inputs */
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header { flex-direction: column; gap: 15px; }
+            .stats { 
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            .table-container { overflow-x: auto; }
+            
+            /* Progress and Chart Layout Responsive */
+            .progress-chart-layout {
+                flex-direction: column;
+            }
+            
+            /* Funnel responsive */
+            .funnel-container { padding: 24px 16px; }
+            .funnel-applied { width: 240px; }
+            .funnel-interview { width: 180px; }
+            .funnel-offer { width: 140px; }
+            .funnel-count { font-size: 28px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats { 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .stat-card {
+                padding: 16px;
+            }
+            .stat-number {
+                font-size: 24px;
+            }
+            
+            /* Funnel mobile */
+            .funnel-container { padding: 20px 12px; }
+            .funnel-applied { width: 200px; }
+            .funnel-interview { width: 160px; }
+            .funnel-offer { width: 120px; }
+            .funnel-stage { padding: 16px 24px; }
+            .funnel-count { font-size: 24px; }
+            .funnel-icon { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📋 Job Application Tracker</h1>
+            <div>
+                <button class="dynamic-add-btn" id="dynamic-add-btn" onclick="handleDynamicAdd()">+ Add New Job</button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('applied')" id="applied-tab">
+                📋 Applied Jobs
+            </button>
+            <button class="tab-btn" onclick="switchTab('targets')" id="targets-tab">
+                🎯 Target Companies
+            </button>
+        </div>
+
+        <!-- Applied Jobs Tab Content -->
+        <div id="applied-content" class="tab-content active">
+            <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card stat-applied">
+                <div class="stat-number" id="stat-applied">0</div>
+                <div class="stat-label">Applied</div>
+            </div>
+            <div class="stat-card stat-interview">
+                <div class="stat-number" id="stat-interview">0</div>
+                <div class="stat-label">Interview</div>
+            </div>
+            <div class="stat-card stat-offer">
+                <div class="stat-number" id="stat-offer">0</div>
+                <div class="stat-label">Offers</div>
+            </div>
+            <div class="stat-card stat-rejected">
+                <div class="stat-number" id="stat-rejected">0</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+            <div class="stat-card stat-total">
+                <div class="stat-number" id="stat-total">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+
+        <!-- Progress and Chart Layout -->
+        <div class="progress-chart-layout">
+            <!-- Progress Section (1/3 width) -->
+            <div class="progress-section">
+                <!-- Daily Progress -->
+                <div class="monthly-progress-container">
+                    <div class="monthly-progress-label">
+                        <span>🎯 <span id="daily-progress-title">Today's Applications</span></span>
+                        <span class="progress-percentage" id="daily-count">0/10</span>
+                    </div>
+                    <div class="monthly-progress-bar">
+                        <div class="monthly-progress-fill" id="daily-fill"></div>
+                    </div>
+                    <div class="monthly-progress-info">
+                        <span id="daily-status">Keep going!</span>
+                        <span id="daily-remaining">10 more to reach daily goal</span>
+                    </div>
+                </div>
+
+                <!-- Monthly Time Progress -->
+                <div class="monthly-progress-container">
+                    <div class="monthly-progress-label">
+                        <span>📅 <span id="current-month-year">January 2025</span></span>
+                        <span class="progress-percentage" id="month-percentage">0%</span>
+                    </div>
+                    <div class="monthly-progress-bar">
+                        <div class="monthly-progress-fill" id="monthly-time-fill"></div>
+                    </div>
+                    <div class="monthly-progress-info">
+                        <span id="days-info">Day 1 of 31</span>
+                        <span id="remaining-days">30 days remaining</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section (2/3 width) -->
+            <div class="chart-section">
+                <div class="daily-chart-container">
+                    <div class="daily-chart-title">📈 Daily Applications Trend</div>
+                    <div class="chart-wrapper">
+                        <svg class="chart-svg" id="daily-chart">
+                            <!-- Chart will be drawn here by JavaScript -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Table -->
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Description</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Applied Date</th>
+                        <th>Link</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="jobTableBody">
+                    <!-- Jobs will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Conversion Funnel -->
+        <div class="funnel-container">
+            <div class="funnel-title">🎯 Application Funnel</div>
+            <div class="funnel-chart">
+                <div class="funnel-stage funnel-applied" id="funnel-applied">
+                    <div class="funnel-stage-content">
+                        <div class="funnel-info">
+                            <div class="funnel-label">📝 Applications</div>
+                            <div class="funnel-count" id="funnel-applied-count">8</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-stage funnel-interview" id="funnel-interview">
+                    <div class="funnel-stage-content">
+                        <div class="funnel-info">
+                            <div class="funnel-label">💬 Interviews</div>
+                            <div class="funnel-count" id="funnel-interview-count">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-stage funnel-offer" id="funnel-offer">
+                    <div class="funnel-stage-content">
+                        <div class="funnel-info">
+                            <div class="funnel-label">🎉 Offers</div>
+                            <div class="funnel-count" id="funnel-offer-count">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- End of Applied Jobs Tab Content -->
+
+        <!-- Target Companies Tab Content -->
+        <div id="targets-content" class="tab-content">
+            <!-- Target Companies Table -->
+            <div class="table-container">
+                <table class="table job-table" id="targets-table">
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Description</th>
+                            <th>Location</th>
+                            <th>Target Position</th>
+                            <th>Timeline</th>
+                            <th>Research Notes</th>
+                            <th>Career Page</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="targets-table-body">
+                        <!-- Target companies will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End of Target Companies Tab Content -->
+    </div>
+
+    <script>
+        // 🎨 【前端数据管理】- 运行在浏览器中
+        let jobs = [];
+        let targets = []; // 储备公司数据数组
+        let currentTab = 'applied'; // 当前活跃的Tab
+
+        // 🌐 【API配置】- 定义与Node.js后端通信的基础路径
+        const API_BASE = '/api';
+
+        // 🔄 【Tab切换功能】
+        function switchTab(tabName) {
+            // 更新当前Tab状态
+            currentTab = tabName;
+            
+            // 移除所有Tab的active类
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 激活选中的Tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.getElementById(`${tabName}-content`).classList.add('active');
+            
+            // 更新动态按钮文本和功能
+            const dynamicBtn = document.getElementById('dynamic-add-btn');
+            if (tabName === 'applied') {
+                dynamicBtn.textContent = '+ Add New Job';
+                dynamicBtn.onclick = handleDynamicAdd;
+            } else if (tabName === 'targets') {
+                dynamicBtn.textContent = '+ Add Target Company';
+                dynamicBtn.onclick = handleDynamicAdd;
+            }
+        }
+
+        // 🎯 【动态添加按钮处理】
+        function handleDynamicAdd() {
+            if (currentTab === 'applied') {
+                addJob();
+            } else if (currentTab === 'targets') {
+                addTarget();
+            }
+        }
+
+        // 📖 【从Node.js后端读取数据】
+        // 这个函数调用Express.js提供的GET /api/jobs接口
+        // Express.js会调用Node.js的文件系统API读取jobs-data.json
+        async function loadDataFromAPI() {
+            console.log('🔄 [API] Loading jobs data from API...');
+            try {
+                // 🔄 浏览器发送HTTP GET请求到Node.js后端
+                const response = await fetch(`${API_BASE}/jobs`);
+                console.log('🔄 [API] Response status:', response.status);
+                if (response.ok) {
+                    // 📦 接收Node.js后端返回的JSON数据
+                    jobs = await response.json();
+                    console.log('✅ [API] Jobs data loaded successfully:', jobs.length, 'jobs');
+                    console.log('✅ [API] Jobs:', jobs);
+                } else {
+                    throw new Error('API加载失败');
+                }
+            } catch (error) {
+                console.error('❌ [API] Loading jobs failed:', error);
+                jobs = []; // 设置为空数组，服务器会提供默认数据
+            }
+        }
+
+        // 💾 【保存数据到Node.js后端】
+        // 这个函数调用Express.js提供的POST /api/jobs接口
+        // Express.js接收数据后，调用Node.js文件系统API写入jobs-data.json
+        async function saveDataToAPI() {
+            try {
+                // 📤 浏览器发送HTTP POST请求到Node.js后端，携带JSON数据
+                const response = await fetch(`${API_BASE}/jobs`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // 告诉Express.js这是JSON数据
+                    },
+                    body: JSON.stringify(jobs) // 将JavaScript对象转为JSON字符串
+                });
+                
+                if (response.ok) {
+                    // 📥 接收Node.js后端的成功响应
+                    const result = await response.json();
+                    console.log('数据已自动同步到JSON文件:', result.message);
+                } else {
+                    throw new Error('API保存失败');
+                }
+            } catch (error) {
+                console.error('保存到API失败:', error);
+                // 🔄 降级方案：如果Node.js后端不可用，保存到浏览器本地存储
+                localStorage.setItem('jobApplications', JSON.stringify(jobs));
+            }
+        }
+
+        // Initialize App
+        async function init() {
+            console.log('🚀 [INIT] Starting initialization...');
+            
+            await loadDataFromAPI();
+            console.log('📊 [INIT] Jobs loaded:', jobs.length);
+            console.log('📊 [INIT] Jobs data:', jobs);
+            
+            await loadTargetsFromAPI();
+            console.log('🎯 [INIT] Targets loaded:', targets.length);
+            
+            renderTable();
+            updateStats();
+            updateProgressChart();
+            
+            // 初始化储备公司数据显示
+            renderTargetsTable();
+            updateTargetsStats();
+            
+            console.log('✅ [INIT] Initialization completed');
+        }
+
+        // Export current data to JSON file (手动导出功能)
+
+        // Save data (统一保存函数)
+        async function saveData() {
+            await saveDataToAPI();
+        }
+
+        // 🎯 【储备公司API通信函数】
+        // 📖 【从Node.js后端读取储备公司数据】
+        async function loadTargetsFromAPI() {
+            try {
+                // 🔄 浏览器发送HTTP GET请求到Node.js后端
+                const response = await fetch(`${API_BASE}/targets`);
+                if (response.ok) {
+                    // 📦 接收Node.js后端返回的JSON数据
+                    targets = await response.json();
+                    console.log('从API加载储备公司数据成功');
+                } else {
+                    throw new Error('API加载失败');
+                }
+            } catch (error) {
+                console.error('从API加载储备公司数据失败:', error);
+                targets = []; // 设置为空数组，服务器会提供默认数据
+            }
+        }
+
+        // 💾 【保存储备公司数据到Node.js后端】
+        async function saveTargetsToAPI() {
+            try {
+                // 📤 浏览器发送HTTP POST请求到Node.js后端，携带JSON数据
+                const response = await fetch(`${API_BASE}/targets`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(targets)
+                });
+                
+                if (response.ok) {
+                    // 📥 接收Node.js后端的成功响应
+                    const result = await response.json();
+                    console.log('储备公司数据已自动同步到JSON文件:', result.message);
+                } else {
+                    throw new Error('API保存失败');
+                }
+            } catch (error) {
+                console.error('保存储备公司到API失败:', error);
+                // 🔄 降级方案：如果Node.js后端不可用，保存到浏览器本地存储
+                localStorage.setItem('targetCompanies', JSON.stringify(targets));
+            }
+        }
+
+        // ➕ 【添加新储备公司到Node.js后端】
+        async function addTarget() {
+            try {
+                // 📤 发送POST请求到Express.js的添加储备公司接口
+                const response = await fetch(`${API_BASE}/targets/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        companyName: 'New Target Company',
+                        industry: 'Technology',
+                        location: 'Amsterdam, Netherlands',
+                        priority: 'medium',
+                        targetPosition: 'Software Engineer',
+                        applicationTimeline: 'Q1 2025',
+                        researchNotes: '',
+                        contactInfo: '',
+                        websiteUrl: '',
+                        careerPageUrl: '',
+                        status: 'researching'
+                    })
+                });
+                
+                if (response.ok) {
+                    // 📦 接收Express.js返回的新储备公司数据
+                    const newTarget = await response.json();
+                    targets.push(newTarget);
+                    
+                    // 🔄 更新显示
+                    renderTargetsTable();
+                    updateTargetsStats();
+                } else {
+                    throw new Error('添加储备公司失败');
+                }
+            } catch (error) {
+                console.error('添加储备公司失败:', error);
+            }
+        }
+
+        // ➕ 【添加新Job到Node.js后端】
+        // 这个函数调用Express.js的POST /api/jobs/add接口
+        // Express.js处理后，调用Node.js文件系统API更新jobs-data.json
+        async function addJob() {
+            try {
+                // 📤 发送POST请求到Express.js的添加job接口
+                const response = await fetch(`${API_BASE}/jobs/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Express.js需要知道数据格式
+                    },
+                    body: JSON.stringify({
+                        company: 'New Company',
+                        description: '',
+                        position: 'New Position', 
+                        status: 'applied',
+                        appliedDate: new Date().toISOString().split('T')[0],
+                        link: '',
+                        notes: ''
+                    })
+                });
+                
+                if (response.ok) {
+                    // 📦 接收Express.js返回的新job数据（包含服务器生成的ID）
+                    const newJob = await response.json();
+                    jobs.push(newJob);
+                    refresh();
+                    console.log('新job添加成功并同步到JSON');
+                } else {
+                    throw new Error('添加失败');
+                }
+            } catch (error) {
+                console.error('添加job失败:', error);
+                // 🔄 降级处理：如果Node.js后端不可用，在前端创建job
+                const newJob = {
+                    id: Date.now(),
+                    company: 'New Company',
+                    position: 'New Position',
+                    status: 'applied',
+                    appliedDate: new Date().toISOString().split('T')[0],
+                    notes: ''
+                };
+                jobs.push(newJob);
+                await saveData();
+                refresh();
+            }
+        }
+
+        // ❌ 【从Node.js后端删除Job】
+        // 这个函数调用Express.js的DELETE /api/jobs/:id接口
+        // Express.js处理后，调用Node.js文件系统API更新jobs-data.json
+        async function deleteJob(id) {
+            if (confirm('Delete this job application?')) {
+                try {
+                    // 📤 发送DELETE请求到Express.js的删除job接口
+                    const response = await fetch(`${API_BASE}/jobs/${id}`, {
+                        method: 'DELETE' // HTTP DELETE方法，Express.js会识别并路由到删除处理器
+                    });
+                    
+                    if (response.ok) {
+                        // 🗑️ Express.js成功删除后，前端也移除对应数据
+                        jobs = jobs.filter(job => job.id !== id);
+                        refresh();
+                        console.log('Job删除成功并同步到JSON');
+                    } else {
+                        throw new Error('删除失败');
+                    }
+                } catch (error) {
+                    console.error('删除job失败:', error);
+                    // 🔄 降级处理：如果Node.js后端不可用，只在前端删除
+                    jobs = jobs.filter(job => job.id !== id);
+                    await saveData();
+                    refresh();
+                }
+            }
+        }
+
+        // Edit cell
+        function editCell(element, id, field) {
+            // Prevent multiple edits
+            if (element.querySelector('input')) return;
+            
+            const job = jobs.find(j => j.id === id);
+            const currentValue = job[field];
+            const originalContent = element.innerHTML;
+            
+            let inputHTML;
+            if (field === 'appliedDate') {
+                inputHTML = `<input type="date" value="${currentValue}" style="width: 100%; padding: 4px; border: 1px solid #3b82f6; border-radius: 4px;">`;
+            } else {
+                inputHTML = `<input type="text" value="${currentValue}" style="width: 100%; padding: 4px; border: 1px solid #3b82f6; border-radius: 4px;">`;
+            }
+            
+            element.innerHTML = inputHTML;
+            const input = element.querySelector('input');
+            input.focus();
+            input.select();
+            
+            // Save on blur or Enter
+            const saveAndRestore = async () => {
+                const newValue = input.value.trim();
+                if (newValue !== currentValue) {
+                    job[field] = newValue;
+                    
+                    // 调用API更新单个job
+                    try {
+                        const response = await fetch(`${API_BASE}/jobs/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ [field]: newValue })
+                        });
+                        
+                        if (response.ok) {
+                            console.log(`字段 ${field} 已同步到JSON文件`);
+                        } else {
+                            throw new Error('API更新失败');
+                        }
+                    } catch (error) {
+                        console.error('更新失败，降级到批量保存:', error);
+                        await saveData();
+                    }
+                    
+                    updateStats();
+                    updateProgressChart();
+                    updateDailyProgress();
+                    updateMonthlyProgress();
+                    drawDailyChart();
+                }
+                element.innerHTML = originalContent.replace(currentValue, newValue || currentValue);
+            };
+            
+            input.onblur = saveAndRestore;
+            input.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    input.blur();
+                }
+            };
+        }
+
+        // Edit status
+        function editStatus(element, id) {
+            // Prevent multiple edits
+            if (element.querySelector('select')) return;
+            
+            const job = jobs.find(j => j.id === id);
+            const currentStatus = job.status;
+            
+            element.innerHTML = `
+                <select style="padding: 4px 8px; border: 1px solid #3b82f6; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                    <option value="applied" ${currentStatus === 'applied' ? 'selected' : ''}>APPLIED</option>
+                    <option value="interview" ${currentStatus === 'interview' ? 'selected' : ''}>INTERVIEW</option>
+                    <option value="offer" ${currentStatus === 'offer' ? 'selected' : ''}>OFFER</option>
+                    <option value="rejected" ${currentStatus === 'rejected' ? 'selected' : ''}>REJECTED</option>
+                </select>
+            `;
+            
+            const select = element.querySelector('select');
+            select.focus();
+            
+            const saveStatus = async () => {
+                const newStatus = select.value;
+                if (newStatus !== currentStatus) {
+                    job.status = newStatus;
+                    
+                    // 调用API更新job状态
+                    try {
+                        const response = await fetch(`${API_BASE}/jobs/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ status: newStatus })
+                        });
+                        
+                        if (response.ok) {
+                            console.log(`状态已更新为 ${newStatus} 并同步到JSON文件`);
+                        } else {
+                            throw new Error('API状态更新失败');
+                        }
+                    } catch (error) {
+                        console.error('状态更新失败，降级到批量保存:', error);
+                        await saveData();
+                    }
+                    
+                    updateStats();
+                    updateProgressChart();
+                    updateDailyProgress();
+                    updateMonthlyProgress();
+                    drawDailyChart();
+                }
+                // Restore status badge
+                element.innerHTML = `<span class="status-badge status-${newStatus}">${newStatus}</span>`;
+            };
+            
+            select.onchange = saveStatus;
+            select.onblur = saveStatus;
+        }
+
+        // Save edit (kept for compatibility)
+        async function saveEdit(input, id, field) {
+            const job = jobs.find(j => j.id === id);
+            job[field] = input.value;
+            
+            // 调用API更新
+            try {
+                const response = await fetch(`${API_BASE}/jobs/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ [field]: input.value })
+                });
+                
+                if (response.ok) {
+                    console.log(`字段 ${field} 已同步到JSON文件`);
+                } else {
+                    throw new Error('API更新失败');
+                }
+            } catch (error) {
+                console.error('更新失败，降级到批量保存:', error);
+                await saveData();
+            }
+            
+            refresh();
+        }
+
+        // 🎯 【储备公司CRUD操作功能】
+        
+        // 编辑储备公司单元格
+        async function editTargetCell(element, id, field) {
+            // Prevent multiple edits
+            if (element.querySelector('input')) return;
+            
+            const target = targets.find(t => t.id === id);
+            const currentValue = target[field];
+            const originalContent = element.innerHTML;
+            
+            // Create input field
+            const input = document.createElement('input');
+            input.value = currentValue;
+            input.className = 'cell-input';
+            input.style.cssText = `
+                width: 100%;
+                border: 2px solid #E0ACD5;
+                border-radius: 4px;
+                padding: 6px;
+                font-size: inherit;
+                background: white;
+            `;
+            
+            element.innerHTML = '';
+            element.appendChild(input);
+            element.classList.add('editing');
+            input.focus();
+            input.select();
+            
+            const saveTargetEdit = async () => {
+                const newValue = input.value.trim();
+                if (newValue !== currentValue && newValue !== '') {
+                    target[field] = newValue;
+                    
+                    // 调用API更新储备公司
+                    try {
+                        const response = await fetch(`${API_BASE}/targets/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ [field]: newValue })
+                        });
+                        
+                        if (response.ok) {
+                            console.log(`储备公司字段 ${field} 已同步到JSON文件`);
+                        } else {
+                            throw new Error('API更新失败');
+                        }
+                    } catch (error) {
+                        console.error('更新储备公司失败:', error);
+                        // 降级方案：本地保存
+                        await saveTargetsToAPI();
+                    }
+                    
+                    renderTargetsTable();
+                    updateTargetsStats();
+                } else {
+                    element.innerHTML = originalContent;
+                    element.classList.remove('editing');
+                }
+            };
+            
+            const cancelTargetEdit = () => {
+                element.innerHTML = originalContent;
+                element.classList.remove('editing');
+            };
+            
+            // Event listeners
+            input.addEventListener('blur', saveTargetEdit);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveTargetEdit();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    cancelTargetEdit();
+                }
+            });
+        }
+
+        // 切换储备公司优先级
+        async function cycleTargetPriority(id) {
+            const target = targets.find(t => t.id === id);
+            const priorities = ['low', 'medium', 'high'];
+            const currentIndex = priorities.indexOf(target.priority);
+            const newPriority = priorities[(currentIndex + 1) % priorities.length];
+            
+            target.priority = newPriority;
+            
+            // 调用API更新
+            try {
+                const response = await fetch(`${API_BASE}/targets/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ priority: newPriority })
+                });
+                
+                if (response.ok) {
+                    console.log(`优先级已更新为 ${newPriority} 并同步到JSON文件`);
+                } else {
+                    throw new Error('API优先级更新失败');
+                }
+            } catch (error) {
+                console.error('更新优先级失败:', error);
+                await saveTargetsToAPI();
+            }
+            
+            renderTargetsTable();
+            updateTargetsStats();
+        }
+
+        // 切换储备公司状态
+        async function cycleTargetStatus(id) {
+            const target = targets.find(t => t.id === id);
+            const statuses = ['researching', 'planning', 'ready'];
+            const currentIndex = statuses.indexOf(target.status);
+            const newStatus = statuses[(currentIndex + 1) % statuses.length];
+            
+            target.status = newStatus;
+            
+            // 调用API更新
+            try {
+                const response = await fetch(`${API_BASE}/targets/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (response.ok) {
+                    console.log(`状态已更新为 ${newStatus} 并同步到JSON文件`);
+                } else {
+                    throw new Error('API状态更新失败');
+                }
+            } catch (error) {
+                console.error('更新状态失败:', error);
+                await saveTargetsToAPI();
+            }
+            
+            renderTargetsTable();
+            updateTargetsStats();
+        }
+
+        // 删除储备公司
+        async function deleteTarget(id) {
+            const target = targets.find(t => t.id === id);
+            if (confirm(`Are you sure you want to delete ${target.companyName}?`)) {
+                try {
+                    const response = await fetch(`${API_BASE}/targets/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        targets = targets.filter(t => t.id !== id);
+                        console.log('储备公司已删除并同步到JSON文件');
+                        renderTargetsTable();
+                        updateTargetsStats();
+                    } else {
+                        throw new Error('删除失败');
+                    }
+                } catch (error) {
+                    console.error('删除储备公司失败:', error);
+                    // 降级处理：如果Node.js后端不可用，只在前端删除
+                    targets = targets.filter(t => t.id !== id);
+                    await saveTargetsToAPI();
+                    renderTargetsTable();
+                    updateTargetsStats();
+                }
+            }
+        }
+
+        // 从储备公司移动到已申请职位
+        async function moveToApplied(id) {
+            const target = targets.find(t => t.id === id);
+            if (confirm(`Move ${target.companyName} to Applied Jobs?`)) {
+                // 创建新的job对象
+                const newJob = {
+                    company: target.companyName,
+                    position: target.targetPosition,
+                    status: 'applied',
+                    appliedDate: new Date().toISOString().split('T')[0],
+                    notes: `Moved from targets. ${target.researchNotes || ''}`,
+                    description: `${target.industry} | ${target.location}`,
+                    link: target.careerPageUrl || ''
+                };
+                
+                try {
+                    // 添加到Applied Jobs
+                    const response = await fetch(`${API_BASE}/jobs/add`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newJob)
+                    });
+                    
+                    if (response.ok) {
+                        const addedJob = await response.json();
+                        jobs.push(addedJob);
+                        
+                        // 从储备公司中删除
+                        await deleteTarget(id);
+                        
+                        // 如果当前在Applied Jobs tab，更新显示
+                        if (currentTab === 'applied') {
+                            renderTable();
+                            updateStats();
+                            updateProgressChart();
+                        }
+                        
+                        alert(`${target.companyName} has been moved to Applied Jobs!`);
+                    } else {
+                        throw new Error('添加到Applied Jobs失败');
+                    }
+                } catch (error) {
+                    console.error('移动到Applied Jobs失败:', error);
+                    alert('Failed to move company to Applied Jobs. Please try again.');
+                }
+            }
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('jobTableBody');
+            
+            if (jobs.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <div class="empty-icon">🚀</div>
+                            <div>No job applications yet. Click "Add New Job" to get started!</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // 按申请日期排序，最新的在最上面，相同日期时按ID排序 (Sort by applied date, newest first, then by ID for same dates)
+            const sortedJobs = [...jobs].sort((a, b) => {
+                // 将日期字符串转换为Date对象进行比较 (Convert date strings to Date objects for comparison)
+                const dateA = new Date(a.appliedDate);
+                const dateB = new Date(b.appliedDate);
+                
+                // 如果日期相同，按ID降序排序（新job的ID更大，排在前面）
+                if (dateA.getTime() === dateB.getTime()) {
+                    return b.id - a.id; // ID降序：更新的job排在前面
+                }
+                
+                return dateB - dateA; // 日期降序：最新日期排在前面 (Descending order)
+            });
+
+            tbody.innerHTML = sortedJobs.map(job => `
+                <tr>
+                    <td class="editable" onclick="editCell(this, ${job.id}, 'company')" title="Click to edit company name">${job.company}</td>
+                    <td class="editable company-description" onclick="editCell(this, ${job.id}, 'description')" title="Click to edit company description">${job.description || '<span style="color: #94a3b8; font-style: italic;">Add description...</span>'}</td>
+                    <td class="editable" onclick="editCell(this, ${job.id}, 'position')" title="Click to edit position">${job.position}</td>
+                    <td onclick="editStatus(this, ${job.id})" title="Click to change status">
+                        <span class="status-badge status-${job.status}">${job.status.toUpperCase()}</span>
+                    </td>
+                    <td class="editable" onclick="editCell(this, ${job.id}, 'appliedDate')" title="Click to edit date">${job.appliedDate}</td>
+                    <td class="editable career-link" onclick="editCell(this, ${job.id}, 'link')" title="Click to edit career page link">${job.link ? '<a href="' + job.link + '" target="_blank" onclick="event.stopPropagation()">🔗 Career Page</a>' : '<span style="color: #94a3b8; font-style: italic;">Add link...</span>'}</td>
+                    <td class="editable" onclick="editCell(this, ${job.id}, 'notes')" title="Click to add/edit notes">${job.notes || '<span style="color: #94a3b8; font-style: italic;">Add notes...</span>'}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteJob(${job.id})" title="Delete this job application">✕</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 🎯 【渲染储备公司表格】
+        function renderTargetsTable() {
+            const tbody = document.getElementById('targets-table-body');
+            
+            if (targets.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <div class="empty-icon">🎯</div>
+                            <div>No target companies yet. Click "Add Target Company" to get started!</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // 按优先级和状态排序 (Sort by priority and status)
+            const sortedTargets = [...targets].sort((a, b) => {
+                const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                const statusOrder = { 'ready': 3, 'planning': 2, 'researching': 1 };
+                
+                // 首先按优先级排序 (Sort by priority first)
+                const priorityCompare = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+                if (priorityCompare !== 0) return priorityCompare;
+                
+                // 然后按状态排序 (Then by status)
+                return (statusOrder[b.status] || 0) - (statusOrder[a.status] || 0);
+            });
+
+            tbody.innerHTML = sortedTargets.map(target => `
+                <tr data-target-id="${target.id}">
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'companyName')" title="Click to edit company name">${target.companyName}</td>
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'industry')" title="Click to edit industry">${target.industry}</td>
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'location')" title="Click to edit location">${target.location}</td>
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'targetPosition')" title="Click to edit target position">${target.targetPosition}</td>
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'applicationTimeline')" title="Click to edit timeline">${target.applicationTimeline}</td>
+                    <td class="editable" onclick="editTargetCell(this, ${target.id}, 'researchNotes')" title="Click to edit research notes" style="max-width: 300px; word-wrap: break-word;">
+                        ${target.researchNotes || '<span style="color: #94a3b8; font-style: italic;">Add notes...</span>'}
+                    </td>
+                    <td class="career-link">
+                        ${target.careerPageUrl ? `<a href="${target.careerPageUrl}" target="_blank">Career Page</a>` : 
+                          `<span class="editable" onclick="editTargetCell(this, ${target.id}, 'careerPageUrl')" title="Click to add career page URL" style="color: #94a3b8; font-style: italic;">Add URL...</span>`}
+                    </td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteTarget(${target.id})" title="Delete target company">Delete</button>
+                        <button class="add-btn" onclick="moveToApplied(${target.id})" title="Move to Applied Jobs" style="margin-left: 8px; background: #29E7CD; color: #3993DD; padding: 6px 12px; font-size: 11px;">Apply</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const counts = {
+                applied: jobs.filter(j => j.status === 'applied').length,
+                interview: jobs.filter(j => j.status === 'interview').length,
+                offer: jobs.filter(j => j.status === 'offer').length,
+                rejected: jobs.filter(j => j.status === 'rejected').length
+            };
+
+            // Calculate total
+            const total = jobs.length;
+
+            // Update all stat cards
+            Object.keys(counts).forEach(status => {
+                document.getElementById(`stat-${status}`).textContent = counts[status];
+            });
+            
+            // Update total card
+            document.getElementById('stat-total').textContent = total;
+        }
+
+        // 🎯 【更新储备公司统计】
+        function updateTargetsStats() {
+            console.log('🎯 [TARGETS] updateTargetsStats() called');
+            console.log('🎯 [TARGETS] Targets count:', targets.length);
+            
+            // Since we removed the target stats cards from HTML, 
+            // we only need to update the funnel chart if it exists
+            try {
+                updateTargetsFunnel();
+                console.log('🎯 [TARGETS] Target funnel updated successfully');
+            } catch (error) {
+                console.log('🎯 [TARGETS] Target funnel update skipped (elements may not exist)');
+            }
+        }
+
+        // 🎯 【更新储备公司漏斗图】
+        function updateTargetsFunnel() {
+            console.log('🎯 [FUNNEL] updateTargetsFunnel() called');
+            
+            const counts = {
+                researching: targets.filter(t => t.status === 'researching').length,
+                planning: targets.filter(t => t.status === 'planning').length,
+                ready: targets.filter(t => t.status === 'ready').length
+            };
+
+            console.log('🎯 [FUNNEL] Target counts:', counts);
+
+            // Check if target funnel elements exist before updating
+            const funnelElements = [
+                'funnel-researching-count',
+                'funnel-planning-count', 
+                'funnel-ready-count'
+            ];
+            
+            funnelElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const status = elementId.replace('funnel-', '').replace('-count', '');
+                    element.textContent = counts[status] || 0;
+                    console.log(`🎯 [FUNNEL] Updated ${elementId}: ${counts[status] || 0}`);
+                } else {
+                    console.log(`🎯 [FUNNEL] Element ${elementId} not found, skipping`);
+                }
+            });
+        }
+
+        // Update funnel chart
+        function updateProgressChart() {
+            const counts = {
+                applied: jobs.filter(j => j.status === 'applied').length,
+                interview: jobs.filter(j => j.status === 'interview').length,
+                offer: jobs.filter(j => j.status === 'offer').length,
+                rejected: jobs.filter(j => j.status === 'rejected').length
+            };
+
+            // Update funnel counts (不包含rejected，因为漏斗不显示rejected)
+            document.getElementById('funnel-applied-count').textContent = counts.applied;
+            document.getElementById('funnel-interview-count').textContent = counts.interview;
+            document.getElementById('funnel-offer-count').textContent = counts.offer;
+            
+            // 添加动画效果 - 根据数据量调整漏斗阶段的透明度和尺寸
+            const appliedElement = document.getElementById('funnel-applied');
+            const interviewElement = document.getElementById('funnel-interview');
+            const offerElement = document.getElementById('funnel-offer');
+            
+            // 根据数据显示状态调整样式
+            appliedElement.style.opacity = counts.applied > 0 ? '1' : '0.6';
+            interviewElement.style.opacity = counts.interview > 0 ? '1' : '0.6';
+            offerElement.style.opacity = counts.offer > 0 ? '1' : '0.6';
+        }
+
+        // Refresh all components
+        function refresh() {
+            renderTable();
+            updateStats();
+            updateProgressChart();
+            updateDailyProgress();
+            updateMonthlyProgress();
+            drawDailyChart();
+        }
+
+        // Update daily progress
+        function updateDailyProgress() {
+            console.log('📅 [DAILY] updateDailyProgress() called');
+            
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            console.log('📅 [DAILY] Today date:', today);
+            
+            const dailyGoal = 10; // 每日目标10个投递
+            
+            // 统计今天添加的job applications
+            const todayApplications = jobs.filter(job => job.appliedDate === today).length;
+            console.log('📅 [DAILY] Today applications:', todayApplications);
+            console.log('📅 [DAILY] All jobs:', jobs.map(j => ({date: j.appliedDate, company: j.company})));
+            
+            // 计算进度百分比
+            const percentage = Math.min((todayApplications / dailyGoal) * 100, 100);
+            const remaining = Math.max(dailyGoal - todayApplications, 0);
+            console.log('📅 [DAILY] Percentage:', percentage);
+            
+            // 检查DOM元素
+            const dailyCountElement = document.getElementById('daily-count');
+            const dailyFillElement = document.getElementById('daily-fill');
+            console.log('📅 [DAILY] daily-count element:', dailyCountElement);
+            console.log('📅 [DAILY] daily-fill element:', dailyFillElement);
+            
+            // 更新DOM元素
+            if (dailyCountElement) {
+                dailyCountElement.textContent = `${todayApplications}/10`;
+                console.log('📅 [DAILY] Updated daily count text');
+            } else {
+                console.error('📅 [DAILY] daily-count element not found!');
+            }
+            
+            if (dailyFillElement) {
+                dailyFillElement.style.width = `${percentage}%`;
+                console.log('📅 [DAILY] Updated daily fill width to:', `${percentage}%`);
+            } else {
+                console.error('📅 [DAILY] daily-fill element not found!');
+            }
+            
+            // 更新状态信息
+            if (todayApplications >= dailyGoal) {
+                document.getElementById('daily-status').textContent = 'Daily goal achieved! 🎉';
+                document.getElementById('daily-remaining').textContent = 'Great job today!';
+            } else if (todayApplications >= dailyGoal * 0.7) {
+                document.getElementById('daily-status').textContent = 'Almost there! 💪';
+                document.getElementById('daily-remaining').textContent = `${remaining} more to reach goal`;
+            } else {
+                document.getElementById('daily-status').textContent = 'Keep going! 📈';
+                document.getElementById('daily-remaining').textContent = `${remaining} more to reach daily goal`;
+            }
+        }
+
+        // Update monthly time progress
+        function updateMonthlyProgress() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const currentDay = now.getDate();
+            
+            // Get days in current month
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Calculate percentage
+            const percentage = Math.round((currentDay / daysInMonth) * 100);
+            
+            // Month names
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            
+            const monthName = months[month];
+            const remainingDays = daysInMonth - currentDay;
+            
+            // Update DOM elements
+            document.getElementById('current-month-year').textContent = `${monthName} ${year}`;
+            document.getElementById('month-percentage').textContent = `${percentage}%`;
+            document.getElementById('monthly-time-fill').style.width = `${percentage}%`;
+            document.getElementById('days-info').textContent = `Day ${currentDay} of ${daysInMonth}`;
+            document.getElementById('remaining-days').textContent = `${remainingDays} days remaining`;
+        }
+
+        // Draw daily applications chart
+        function drawDailyChart() {
+            console.log('📈 [CHART] drawDailyChart() called');
+            
+            const svg = document.getElementById('daily-chart');
+            if (!svg) {
+                console.error('📈 [CHART] SVG element with id "daily-chart" not found');
+                return;
+            }
+            console.log('📈 [CHART] SVG element found:', svg);
+            
+            const svgRect = svg.getBoundingClientRect();
+            console.log('📈 [CHART] SVG rect:', svgRect);
+            const width = svgRect.width || 800;
+            const height = svgRect.height || 200;
+            console.log('📈 [CHART] Chart dimensions:', {width, height});
+            const padding = 40;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // Calculate daily application counts (Day 0 + Day 1-30)
+            const dailyCounts = Array(31).fill(0); // Day 0 to Day 30
+            
+            jobs.forEach(job => {
+                const date = new Date(job.appliedDate);
+                
+                // Handle August 31 as Day 0
+                if (job.appliedDate === '2025-08-31') {
+                    dailyCounts[0] = (dailyCounts[0] || 0) + 1; // Day 0
+                } else if (date.getFullYear() === 2025 && date.getMonth() === 8) { // September (month 8)
+                    const day = date.getDate(); // Day 1-30
+                    if (day >= 1 && day <= 30) {
+                        dailyCounts[day] = (dailyCounts[day] || 0) + 1;
+                    }
+                }
+            });
+
+            console.log('📈 [CHART] Daily counts for chart:', dailyCounts);
+            console.log('📈 [CHART] Jobs data:', jobs);
+            const maxCount = 15; // Fixed Y-axis maximum
+            
+            // Clear SVG
+            svg.innerHTML = '';
+            console.log('📈 [CHART] SVG cleared, starting to draw elements...');
+            
+            // Create grid lines
+            console.log('📈 [CHART] Creating grid lines...');
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (i * chartHeight / 5);
+                const gridLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                gridLine.setAttribute('x1', padding);
+                gridLine.setAttribute('y1', y);
+                gridLine.setAttribute('x2', width - padding);
+                gridLine.setAttribute('y2', y);
+                gridLine.setAttribute('class', 'chart-grid');
+                svg.appendChild(gridLine);
+                
+                // Y-axis labels (0, 3, 6, 9, 12, 15)
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', padding - 10);
+                label.setAttribute('y', y + 4);
+                label.setAttribute('class', 'chart-label');
+                label.textContent = Math.round(15 * (5 - i) / 5);
+                svg.appendChild(label);
+            }
+            
+            // X and Y axes
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', padding);
+            xAxis.setAttribute('y1', height - padding);
+            xAxis.setAttribute('x2', width - padding);
+            xAxis.setAttribute('y2', height - padding);
+            xAxis.setAttribute('class', 'chart-axis');
+            svg.appendChild(xAxis);
+            
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', padding);
+            yAxis.setAttribute('y1', padding);
+            yAxis.setAttribute('x2', padding);
+            yAxis.setAttribute('y2', height - padding);
+            yAxis.setAttribute('class', 'chart-axis');
+            svg.appendChild(yAxis);
+            
+            // Create line path
+            let pathData = '';
+            const points = [];
+            
+            for (let i = 0; i < 31; i++) { // 0 to 30 (Day 0 to Day 30)
+                const x = padding + (i * chartWidth / 30); // 30 intervals for 31 days
+                const y = height - padding - (dailyCounts[i] * chartHeight / maxCount);
+                const dayLabel = i === 0 ? 0 : i;
+                points.push({ x, y, count: dailyCounts[i], day: dayLabel });
+                
+                if (i === 0) {
+                    pathData += `M ${x} ${y}`;
+                } else {
+                    pathData += ` L ${x} ${y}`;
+                }
+            }
+            
+            // Draw the line
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('class', 'chart-line');
+            svg.appendChild(path);
+            
+            // Add points and labels
+            points.forEach((point, index) => {
+                // Add circle for each point
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', point.x);
+                circle.setAttribute('cy', point.y);
+                circle.setAttribute('class', 'chart-point');
+                svg.appendChild(circle);
+                
+                // Add value label for non-zero points
+                if (point.count > 0) {
+                    const valueLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    valueLabel.setAttribute('x', point.x);
+                    valueLabel.setAttribute('y', point.y - 10);
+                    valueLabel.setAttribute('class', 'chart-value-label');
+                    valueLabel.textContent = point.count;
+                    svg.appendChild(valueLabel);
+                }
+                
+                // Add day labels (every 5 days, plus Day 0)
+                if (index % 5 === 0 || index === 0) {
+                    const dayLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    dayLabel.setAttribute('x', point.x);
+                    dayLabel.setAttribute('y', height - padding + 20);
+                    dayLabel.setAttribute('class', 'chart-label');
+                    dayLabel.textContent = `Day ${point.day}`;
+                    svg.appendChild(dayLabel);
+                }
+            });
+            
+            // Create hover elements
+            const hoverLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            hoverLine.setAttribute('class', 'hover-line');
+            hoverLine.setAttribute('stroke', '#E0ACD5');
+            hoverLine.setAttribute('stroke-width', '2');
+            hoverLine.setAttribute('stroke-dasharray', '5,5');
+            hoverLine.style.opacity = '0';
+            hoverLine.setAttribute('y1', padding);
+            hoverLine.setAttribute('y2', height - padding);
+            svg.appendChild(hoverLine);
+            
+            const hoverTooltip = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            hoverTooltip.setAttribute('class', 'hover-tooltip');
+            hoverTooltip.style.opacity = '0';
+            
+            const tooltipRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            tooltipRect.setAttribute('fill', 'rgba(0, 0, 0, 0.8)');
+            tooltipRect.setAttribute('rx', '6');
+            tooltipRect.setAttribute('ry', '6');
+            hoverTooltip.appendChild(tooltipRect);
+            
+            const tooltipText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            tooltipText.setAttribute('fill', 'white');
+            tooltipText.setAttribute('font-size', '12');
+            tooltipText.setAttribute('text-anchor', 'middle');
+            hoverTooltip.appendChild(tooltipText);
+            
+            svg.appendChild(hoverTooltip);
+            
+            // Create invisible overlay for hover detection
+            const hoverOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            hoverOverlay.setAttribute('x', padding);
+            hoverOverlay.setAttribute('y', padding);
+            hoverOverlay.setAttribute('width', chartWidth);
+            hoverOverlay.setAttribute('height', chartHeight);
+            hoverOverlay.setAttribute('fill', 'transparent');
+            hoverOverlay.style.cursor = 'crosshair';
+            
+            // Add hover event listeners
+            hoverOverlay.addEventListener('mousemove', (e) => {
+                const rect = svg.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                
+                // Calculate which day corresponds to this X position
+                const relativeX = mouseX - padding;
+                const dayIndex = Math.round((relativeX / chartWidth) * 30);
+                
+                if (dayIndex >= 0 && dayIndex <= 30) {
+                    const day = dayIndex === 0 ? 0 : dayIndex;
+                    const applications = dailyCounts[dayIndex];
+                    const xPos = padding + (dayIndex * chartWidth / 30);
+                    
+                    // Show hover line
+                    hoverLine.setAttribute('x1', xPos);
+                    hoverLine.setAttribute('x2', xPos);
+                    hoverLine.style.opacity = '1';
+                    
+                    // Update and show tooltip
+                    const dateStr = day === 0 ? 'Aug 31' : `Sep ${day}`;
+                    const tooltipContent = `${dateStr}: ${applications} applications`;
+                    tooltipText.textContent = tooltipContent;
+                    
+                    // Position tooltip
+                    const tooltipWidth = tooltipContent.length * 7.5 + 16;
+                    let tooltipX = xPos;
+                    
+                    // Adjust tooltip position if it would go off-screen
+                    if (tooltipX + tooltipWidth/2 > width - padding) {
+                        tooltipX = width - padding - tooltipWidth/2;
+                    } else if (tooltipX - tooltipWidth/2 < padding) {
+                        tooltipX = padding + tooltipWidth/2;
+                    }
+                    
+                    tooltipRect.setAttribute('x', tooltipX - tooltipWidth/2);
+                    tooltipRect.setAttribute('y', padding - 35);
+                    tooltipRect.setAttribute('width', tooltipWidth);
+                    tooltipRect.setAttribute('height', '25');
+                    
+                    tooltipText.setAttribute('x', tooltipX);
+                    tooltipText.setAttribute('y', padding - 20);
+                    
+                    hoverTooltip.style.opacity = '1';
+                }
+            });
+            
+            hoverOverlay.addEventListener('mouseleave', () => {
+                hoverLine.style.opacity = '0';
+                hoverTooltip.style.opacity = '0';
+            });
+            
+            svg.appendChild(hoverOverlay);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔧 [DOM] DOMContentLoaded event fired');
+            
+            await init();
+            
+            console.log('🔧 [DOM] Calling updateDailyProgress...');
+            updateDailyProgress();
+            
+            console.log('🔧 [DOM] Calling updateMonthlyProgress...');
+            updateMonthlyProgress();
+            
+            // Wait a bit for SVG to be rendered, then draw chart
+            console.log('🔧 [DOM] Setting timeout for chart...');
+            setTimeout(() => {
+                console.log('🔧 [DOM] Drawing chart...');
+                drawDailyChart();
+            }, 100);
+            
+            // Update progress every hour
+            setInterval(() => {
+                updateDailyProgress();
+                updateMonthlyProgress();
+            }, 3600000);
+            
+            // Redraw chart on window resize
+            window.addEventListener('resize', () => {
+                setTimeout(() => {
+                    drawDailyChart();
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
