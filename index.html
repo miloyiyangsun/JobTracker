@@ -404,9 +404,10 @@
         }
 
         .table {
-            min-width: 1400px; /* 增加最小宽度支持Link列 (Increase minimum width to support Link column) */
+            min-width: 1500px; /* 优化表格最小宽度以支持所有列宽度 (Optimized minimum table width to support all column widths) */
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed; /* 固定表格布局提高性能和可预测性 (Fixed table layout for better performance and predictability) */
         }
 
         .table th,
@@ -445,27 +446,43 @@
             font-size: 13px;
         }
 
-        /* Timeline column width - 允许自动换行的紧凑布局 */
+        /* Applied Date column - 应用日期列紧凑布局 (Applied date column compact layout) */
         .table th:nth-child(5),
         .table td:nth-child(5) {
-            width: 105px !important;
-            min-width: 105px !important;
-            max-width: 105px !important;
+            width: 110px !important;
+            min-width: 110px !important;
+            max-width: 110px !important;
             white-space: normal;
             word-wrap: break-word;
+            text-align: center;
         }
 
-        /* Company description column - 公司简介列样式 */
+        /* Company description column - 优化以适应新的详细描述格式 (Optimized for new detailed description format) */
         .table th:nth-child(2),
         .table td:nth-child(2) {
-            width: 200px;
-            min-width: 180px;
-            max-width: 250px;
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.4;
+            font-size: 12px;
         }
 
-        /* Research Notes column width - 增加宽度显示更多研究信息 */
+        /* Feedback Date column - 反馈日期列样式 (第6列) */
         .table th:nth-child(6),
         .table td:nth-child(6) {
+            width: 110px !important;
+            min-width: 110px !important;
+            max-width: 110px !important;
+            white-space: normal;
+            word-wrap: break-word;
+            text-align: center;
+        }
+
+        /* Notes column width - 增加宽度显示更多申请备注信息 (第7列) */
+        .table th:nth-child(7),
+        .table td:nth-child(7) {
             width: 300px !important;
             min-width: 300px !important;
             max-width: 300px !important;
@@ -473,30 +490,36 @@
             white-space: normal;
         }
 
-        /* Company Name column - 居中显示 */
+        /* Company Name column - 设置固定宽度并居中显示 (Set fixed width and center align) */
         .table th:nth-child(1),
         .table td:nth-child(1) {
+            width: 140px !important;
+            min-width: 140px !important;
+            max-width: 140px !important;
             text-align: center !important;
+            word-wrap: break-word;
+            white-space: normal;
         }
 
-        /* Location column - 与Timeline相同的宽度 */
+        /* Position column - 优化职位名称宽度 (Optimized position name width) */
         .table th:nth-child(3),
         .table td:nth-child(3) {
-            width: 105px !important;
-            min-width: 105px !important;
-            max-width: 105px !important;
+            width: 130px !important;
+            min-width: 130px !important;
+            max-width: 130px !important;
             white-space: normal;
             word-wrap: break-word;
         }
 
-        /* Target Position column - 与Timeline相同的宽度 */
+        /* Status column - 状态列宽度 (Status column width) */
         .table th:nth-child(4),
         .table td:nth-child(4) {
-            width: 105px !important;
-            min-width: 105px !important;
-            max-width: 105px !important;
+            width: 100px !important;
+            min-width: 100px !important;
+            max-width: 100px !important;
             white-space: normal;
             word-wrap: break-word;
+            text-align: center;
         }
 
         .company-description {
@@ -505,9 +528,9 @@
             color: black;
         }
 
-        /* Link column styling - 链接列样式 */
-        .table th:nth-child(6),
-        .table td:nth-child(6) {
+        /* Link column styling - 链接列样式 (第8列) */
+        .table th:nth-child(8),
+        .table td:nth-child(8) {
             width: 120px;
             min-width: 100px;
             text-align: center;
@@ -883,14 +906,14 @@
                 <div class="monthly-progress-container">
                     <div class="monthly-progress-label">
                         <span>🎯 <span id="daily-progress-title">Today's Applications</span></span>
-                        <span class="progress-percentage" id="daily-count">0/10</span>
+                        <span class="progress-percentage" id="daily-count">0/5</span>
                     </div>
                     <div class="monthly-progress-bar">
                         <div class="monthly-progress-fill" id="daily-fill"></div>
                     </div>
                     <div class="monthly-progress-info">
                         <span id="daily-status">Keep going!</span>
-                        <span id="daily-remaining">10 more to reach daily goal</span>
+                        <span id="daily-remaining">5 more to reach daily goal</span>
                     </div>
                 </div>
 
@@ -933,8 +956,9 @@
                         <th>Position</th>
                         <th>Status</th>
                         <th>Applied Date</th>
-                        <th>Link</th>
+                        <th>Feedback Date</th>
                         <th>Notes</th>
+                        <th>Link</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -1705,8 +1729,9 @@
                         <span class="status-badge status-${job.status}">${job.status.toUpperCase()}</span>
                     </td>
                     <td class="editable" onclick="editCell(this, ${job.id}, 'appliedDate')" title="Click to edit date">${job.appliedDate}</td>
-                    <td class="editable career-link" onclick="editCell(this, ${job.id}, 'link')" title="Click to edit career page link">${job.link ? '<a href="' + job.link + '" target="_blank" onclick="event.stopPropagation()">🔗 Career Page</a>' : '<span style="color: #94a3b8; font-style: italic;">Add link...</span>'}</td>
+                    <td class="editable" onclick="editCell(this, ${job.id}, 'feedbackDate')" title="Click to edit feedback date">${job.feedbackDate || '-'}</td>
                     <td class="editable" onclick="editCell(this, ${job.id}, 'notes')" title="Click to add/edit notes">${job.notes || '<span style="color: #94a3b8; font-style: italic;">Add notes...</span>'}</td>
+                    <td class="editable career-link" onclick="editCell(this, ${job.id}, 'link')" title="Click to edit career page link">${job.link ? '<a href="' + job.link + '" target="_blank" onclick="event.stopPropagation()">🔗 Career Page</a>' : '<span style="color: #94a3b8; font-style: italic;">Add link...</span>'}</td>
                     <td>
                         <button class="delete-btn" onclick="deleteJob(${job.id})" title="Delete this job application">✕</button>
                     </td>
@@ -1841,8 +1866,9 @@
                 rejected: jobs.filter(j => j.status === 'rejected').length
             };
 
-            // Update funnel counts (不包含rejected，因为漏斗不显示rejected)
-            document.getElementById('funnel-applied-count').textContent = counts.applied;
+            // Update funnel counts - Application漏斗显示申请总数(包括所有状态)
+            const funnelAppliedCount = jobs.length; // 使用申请总数16个
+            document.getElementById('funnel-applied-count').textContent = funnelAppliedCount;
             document.getElementById('funnel-interview-count').textContent = counts.interview;
             document.getElementById('funnel-offer-count').textContent = counts.offer;
             
@@ -1852,7 +1878,7 @@
             const offerElement = document.getElementById('funnel-offer');
             
             // 根据数据显示状态调整样式
-            appliedElement.style.opacity = counts.applied > 0 ? '1' : '0.6';
+            appliedElement.style.opacity = funnelAppliedCount > 0 ? '1' : '0.6';
             interviewElement.style.opacity = counts.interview > 0 ? '1' : '0.6';
             offerElement.style.opacity = counts.offer > 0 ? '1' : '0.6';
         }
@@ -1874,7 +1900,7 @@
             const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
             console.log('📅 [DAILY] Today date:', today);
             
-            const dailyGoal = 10; // 每日目标10个投递
+            const dailyGoal = 5; // 每日目标5个投递
             
             // 统计今天添加的job applications
             const todayApplications = jobs.filter(job => job.appliedDate === today).length;
@@ -1894,7 +1920,7 @@
             
             // 更新DOM元素
             if (dailyCountElement) {
-                dailyCountElement.textContent = `${todayApplications}/10`;
+                dailyCountElement.textContent = `${todayApplications}/${dailyGoal}`;
                 console.log('📅 [DAILY] Updated daily count text');
             } else {
                 console.error('📅 [DAILY] daily-count element not found!');

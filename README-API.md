@@ -21,7 +21,7 @@ node server.js
 ```
 
 ### 3. 访问应用
-打开浏览器访问: **http://localhost:3000**
+打开浏览器访问: **http://localhost:8000**
 
 ### 4. 使用体验
 - ✅ 在网页端添加/编辑/删除job → 自动同步到 `jobs-data.json`
@@ -75,7 +75,7 @@ JobTracking/
 
 ## 🚨 注意事项
 - 服务器必须运行才能使用（`npm start`）
-- 访问地址固定为 `http://localhost:3000`
+- 访问地址固定为 `http://localhost:8000`
 - JSON文件格式错误会导致数据加载失败
 - 关闭服务器（Ctrl+C）会停止API服务
 

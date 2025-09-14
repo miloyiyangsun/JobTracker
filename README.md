@@ -38,12 +38,12 @@ npm install
 npm start
 
 # 4. 访问应用
-# 浏览器打开: http://localhost:3000
+# 浏览器打开: http://localhost:8000
 ```
 
 ## ⚡ 核心架构 | Architecture
 
-- **后端**: Node.js + Express.js (端口3000)
+- **后端**: Node.js + Express.js (端口8000)
 - **前端**: 原生HTML/CSS/JavaScript SPA
 - **数据**: JSON文件持久化存储
 - **API**: RESTful CRUD接口

@@ -9,7 +9,7 @@ const path = require('path');        // Node.js路径处理 - 处理文件路径
 
 // 🏭 【创建Express.js应用实例】
 const app = express();  // Express.js的核心：创建Web应用
-const PORT = 3000;      // 服务器端口
+const PORT = 3001;      // 服务器端口
 const JOBS_FILE = path.join(__dirname, 'jobs-data.json'); // Node.js计算文件绝对路径
 const TARGETS_FILE = path.join(__dirname, 'targets-data.json'); // 储备公司数据文件路径
 
